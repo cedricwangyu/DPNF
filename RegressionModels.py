@@ -1,12 +1,7 @@
 import os
 import numpy as np
 import torch
-from torch import nn
 import torch.distributions as D
-import random
-from train_DE import train, train_noisy
-from maf import MAF, RealNVP
-from tqdm import tqdm
 
 torch.set_default_tensor_type(torch.DoubleTensor)
 

@@ -2,9 +2,7 @@ import os
 import random
 import torch
 import numpy as np
-import scipy as sp
 from maf import MAF, RealNVP
-from tqdm import tqdm
 from utility import parse
 
 args = parse('DP_Normalizing_Flow')

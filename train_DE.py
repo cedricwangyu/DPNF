@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 from torch import nn
 
 torch.set_default_tensor_type(torch.DoubleTensor)

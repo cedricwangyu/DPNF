@@ -4,10 +4,7 @@ sys.path.append('supplMatHarrod20/models/')
 from cvsim6 import cvsim6
 import numpy as np
 import torch
-import torch.distributions as D
-from tqdm import tqdm
 from FNN_surrogate_nested import Surrogate
-from train_VI import train
 
 torch.set_default_tensor_type(torch.DoubleTensor)
 
@@ -110,7 +107,7 @@ class CircuitModel(model_generic):
         mapped_par = self.map_params(full_params)
         outs = []
         if print_mode:
-            for loopA in tqdm(range(len(params))):
+            for loopA in range(len(params)):
                 output, _, _ = self.circuit_model.solve(mapped_par[loopA], y0=None)
                 outs.append(output)
         else:
