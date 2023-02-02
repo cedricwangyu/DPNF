@@ -2,15 +2,6 @@
 This repository contains python implementations for paper *Differentially Private Normalizing Flows for Density Estimation, Data Synthesis, and Variational Inference with Application to Electronic Health Records*. 
 Density estimation, variational inference with differentially private normalizing flow are implemented for an analytical regression model and a circuit model for health data. 
 
-## Citation
-Circuit model implementation is cited from [the Schiavazzi Lab at the University of Notre Dame](https://github.com/desResLab/supplMatHarrod20/tree/master/models)
-and Normalizing Flow (MADE, MAF, RealNVP) implementation is cited from [Kamen Bliznashki](https://github.com/kamenbliznashki/normalizing_flows). 
-## Repository Information 
-
-This repository contains the supplementary material to the paper *K.K. Harrod, J.L. Rogers, J.A. Feinstein, A.L. Marsden and D.E. Schiavazzi*, [**Predictive modeling of secondary pulmonary hypertension in left ventricular diastolic dysfunction**](https://www.frontiersin.org/articles/10.3389/fphys.2021.666915/full).
-
-We provide the two datasets used to generate the results in the paper. Additionally we also provide some python scripts to run zero-dimensional hemodynamic models representing simple RC and RCR models, and one model for adult cardiovascular physiology.
-
 ## Requirements
 * Python 3.10.0
 * PyTorch 1.11.0
