@@ -81,7 +81,12 @@ We summarize all hyper parameters used in these experiments.
 | Clipping constant         | --C                | 10         |            | 10         | 5          |            |
 | Poisson sampling rate     | --poisson_ratio    | 0.5        |            | 0.08333333 | 0.08333333 |            |
 
-
+Note that
+* **EHR DP-DE**: Differentially private density estimation on EHR data (Section 3.2).
+* **EHR VI**: Variational inference with normalizing flow with circuit model on EHR data (Section 3.4.2).
+* **Reg DP-VI**: Differentially private variational inference with normalizing flow on regression model (Section 4.2).
+* **Reg DP-DE**: Differentially private density estimation on regression model (Section 4.2).
+* **Reg VI**: Variational inference with normalizing on regression model (Section 4.2).
 
 
 
