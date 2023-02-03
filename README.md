@@ -13,7 +13,7 @@ and Normalizing Flow (MADE, MAF, RealNVP) implementation is cited from [Kamen Bl
 * Scipy 1.8.0
 * Cvsim6
 
-cvsim6 is limited for experiment with circuit model, which is contained in folder [supplMatHarrod20](https://github.com/cedricwangyu/DPNF/supplMatHarrod20/models/). 
+cvsim6 is limited for experiment with circuit model, which is contained in folder [supplMatHarrod20](https://github.com/cedricwangyu/DPNF/supplMatHarrod20). 
 To complile this package, please cd to the folder [models](https://github.com/cedricwangyu/DPNF/supplMatHarrod20/models) and execute the following in terminal
 ```
 python3 setup.py build_ext --inplace
@@ -52,7 +52,7 @@ To run with EHR data, the surrogate model should be trained, therefore *circuit_
 ```
 python EHR.py --data_dir source/data/EHR_private/EHR.txt
 ```
-These two files are also contained in folder [trained_circuit_surrogate](source/data/trained_circuit_surrogate). Then we recommend
+These two files are also contained in folder [trained_circuit_surrogate](https://github.com/cedricwangyu/DPNF/source/data/trained_circuit_surrogate). Then we recommend
 ```
 python run_experiment.py --task vi --job ehr --data_dir source/data/EHR_private/EHR_cvsim6.txt --n_blocks 5 --n_hidden 1 --hidden_size 100 --input_size 2 --n_iter 15000 --batch_size 500 --optimizer_type rmsprop --lr 0.01 --scheduler_order True --lr_decay 0.9999 
 ```
