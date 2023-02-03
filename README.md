@@ -18,7 +18,7 @@ To complile this package, please cd to the folder [models](https://github.com/ce
 ```
 python3 setup.py build_ext --inplace
 ```
-For additional information, please refer to the [README](https://github.com/cedricwangyu/DPNF/supplMatHarrod20/README.md) and the other [README](https://github.com/cedricwangyu/DPNF/supplMatHarrod20/models/README.md).
+For additional information, please refer to the [README](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20/README.md) and the other [README](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20/models/README.md).
 
 ## Density Estimation
 To run with EHR data without differential privacy, we recommend
