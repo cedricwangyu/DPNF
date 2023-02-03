@@ -13,12 +13,12 @@ and Normalizing Flow (MADE, MAF, RealNVP) implementation is cited from [Kamen Bl
 * Scipy 1.8.0
 * Cvsim6
 
-cvsim6 is limited for experiment with circuit model, which is contained in folder [supplMatHarrod20](supplMatHarrod20/models). 
-To complile this package, please cd to the folder [models](supplMatHarrod20/models) and execute the following in terminal
+cvsim6 is limited for experiment with circuit model, which is contained in folder [supplMatHarrod20](https://github.com/cedricwangyu/DPNF/supplMatHarrod20/models). 
+To complile this package, please cd to the folder [models](https://github.com/cedricwangyu/DPNFsupplMatHarrod20/models) and execute the following in terminal
 ```
 python3 setup.py build_ext --inplace
 ```
-For additional information, please refer to the [README](supplMatHarrod20/README.md) and the other [README](supplMatHarrod20/models/README.md).
+For additional information, please refer to the [README](https://github.com/cedricwangyu/DPNFsupplMatHarrod20/README.md) and the other [README](https://github.com/cedricwangyu/DPNFsupplMatHarrod20/models/README.md).
 
 ## Density Estimation
 To run with EHR data without differential privacy, we recommend
