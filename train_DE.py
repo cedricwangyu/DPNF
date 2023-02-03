@@ -31,7 +31,7 @@ def train_noisy(model, x, optimizer, i, args, loglist, device=None):
         else:
             lp.backward()
         if args.noisy == 'True':
-            total_norm = nn.utils.clip_grad_norm_(model.parameters(), max_norm=exp.C, norm_type=2)
+            total_norm = nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.C, norm_type=2)
         for jj, p in enumerate(model.parameters()):
             grads[jj] += p.grad.clone()
 

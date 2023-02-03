@@ -71,9 +71,7 @@ def execute_VI(args, device, model, optimizer, scheduler):
     elif args.job == 'ehr':
         import sys
         sys.path.append('supplMatHarrod20/models/')
-        from cvsim6 import cvsim6
         from model_circuit import CircuitModel
-        from FNN_surrogate_nested import Surrogate
         from EHR import initialize
         input_map = [4, 8]
         input_size = len(input_map)
@@ -97,14 +95,14 @@ def execute_VI(args, device, model, optimizer, scheduler):
             if scheduler:
                 scheduler.step()
             ind = (torch.Tensor(rt.NI).uniform_(0, 1) < args.poisson_ratio).to(device)
-            train_noisy_vi(model, rt, optimizer, device, i, args, loglist, sampling=True, ind=ind, surrogate=True)
+            train_noisy(model, rt, optimizer, device, i, args, loglist, sampling=True, ind=ind, surrogate=True)
 
 
 if __name__ == "__main__":
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() and not args.no_cuda else 'cpu')
+    device = torch.device('cuda:0' if torch.cuda.is_available() and not args.no_cuda == 'True' else 'cpu')
     if args.seed >= 0:
         torch.manual_seed(args.seed)
     else:
