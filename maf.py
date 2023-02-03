@@ -1,3 +1,8 @@
+'''
+This python file comes from Kamen Bliznashki's implementation of MADE/MAF/RealNVP (https://github.com/kamenbliznashki/normalizing_flows)
+'''
+
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -46,10 +51,6 @@ class MaskedLinear(nn.Linear):
 
     def __init__(self, input_size, n_outputs, mask, cond_label_size=None):
         super().__init__(input_size, n_outputs)
-        # self.weight.data.fill_(1.00)
-        # self.bias.data.fill_(0.00)
-        # self.weight.data.uniform_(0.9,1.1)
-        # self.bias.data.uniform_(-0.1,0.1)
 
         self.register_buffer('mask', mask)
 
@@ -155,9 +156,6 @@ class BatchNorm(nn.Module):
 
         # compute log_abs_det_jacobian (cf RealNVP paper)
         log_abs_det_jacobian = self.log_gamma - 0.5 * torch.log(var + self.eps)
-        # print('in sum log var {:6.3f} ; out sum log var {:6.3f}; sum log det {:8.3f}; mean log_gamma {:5.3f}; mean
-        # beta {:5.3f}'.format( (var + self.eps).log().sum().data.numpy(), y.var(0).log().sum().data.numpy(),
-        # log_abs_det_jacobian.mean(0).item(), self.log_gamma.mean(), self.beta.mean()))
         return y, log_abs_det_jacobian.expand_as(x)
 
     def inverse(self, y, cond_y=None):
@@ -273,7 +271,6 @@ class MAF(nn.Module):
         # base distribution for calculation of log prob under the model
         self.register_buffer('base_dist_mean', torch.zeros(input_size))
         self.register_buffer('base_dist_var', torch.ones(input_size))
-        # self.register_buffer('base_dist_var', torch.ones(input_size) * 0.5)
 
         # construct model
         modules = []
@@ -289,22 +286,6 @@ class MAF(nn.Module):
     @property
     def base_dist(self):
         return D.Normal(self.base_dist_mean, self.base_dist_var)
-    # @property
-    # def base_dist(self):
-    #     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    #     # device = torch.device('cpu')
-    #     mu = torch.Tensor([0.1580831, 1.0021829, 0.8261547, -1.1908893, 0.6088425]).to(device)
-    #     Sigma = torch.Tensor([[0.000703842332620729, -1.15061692791983e-05, -0.000206123977049033,
-    #                            -0.000295165171376471, -0.000249215694045690],
-    #                           [-1.15061692791983e-05, 1.30624199548090e-05, -1.94103858072771e-07,
-    #                            -8.72954754345664e-07, -5.56569857261680e-07],
-    #                           [-0.000206123977049033, -1.94103858072771e-07, 0.000320480923724361, 1.08098835136517e-06,
-    #                            -6.89205860241660e-07],
-    #                           [-0.000295165171376471, -8.72954754345664e-07, 1.08098835136517e-06, 0.000227887162948624,
-    #                            -5.81176172637520e-07],
-    #                           [-0.000249215694045690, -5.56569857261680e-07, -6.89205860241660e-07,
-    #                            -5.81176172637520e-07, 0.000370540555324900]]).to(device)
-    #     return D.MultivariateNormal(mu, Sigma)
 
     def forward(self, x, y=None):
         return self.net(x, y)

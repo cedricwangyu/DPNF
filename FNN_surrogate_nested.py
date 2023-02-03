@@ -1,3 +1,7 @@
+'''
+This python file implements surrogate model formed by a fully connected neural network
+'''
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -7,6 +11,11 @@ torch.set_default_tensor_type(torch.DoubleTensor)
 
 
 class FNN(nn.Module):
+    '''
+    This is the basic class of a fully connected neural network.
+    Default setting is input_size -> 64 -> 32 -> output_size, with tanh activation
+    '''
+
     def __init__(self, input_size, output_size):
         super().__init__()
         self.fc1 = nn.Linear(input_size, 64)
@@ -23,27 +32,31 @@ class FNN(nn.Module):
 
 
 class Surrogate:
+    '''
+    This is the surrogate class, that support NoFAS (https://github.com/cedricwangyu/NoFAS)
+    '''
+
     def __init__(self, model_name, model_func, input_size, output_size, limits=None, memory_len=20):
         self.input_size = input_size
         self.output_size = output_size
         self.model_name = model_name
-        self.mf = model_func
+        self.mf = model_func  # True model function
         self.pre_out = None
         self.m = None
         self.sd = None
         self.tm = None
         self.tsd = None
-        self.limits = limits
-        self.pre_grid = None
-        self.surrogate = FNN(input_size, output_size)
-        self.beta_0 = 0.5
-        self.beta_1 = 0.1
+        self.limits = limits  # Limits of inputs
+        self.pre_grid = None  # Pre-grid of surrogate
+        self.surrogate = FNN(input_size, output_size)  # Surrogate model
+        self.beta_0 = 0.5  # NoFAS parameter
+        self.beta_1 = 0.1  # NoFAS parameter
 
-        self.memory_grid = []
-        self.memory_out = []
-        self.memory_len = memory_len
-        self.weights = torch.Tensor([np.exp(-self.beta_1 * i) for i in range(memory_len)])
-        self.grid_record = None
+        self.memory_grid = []  # NoFAS memory buffer
+        self.memory_out = []  # NoFAS memory buffer
+        self.memory_len = memory_len  # The maximal number of batches in buffer
+        self.weights = torch.Tensor([np.exp(-self.beta_1 * i) for i in range(memory_len)])  # Decay weight pattern
+        self.grid_record = None  # NoFAS memory buffer
 
     @property
     def limits(self):
@@ -91,6 +104,13 @@ class Surrogate:
             self.tsd = torch.std(self.pre_out, 0)
 
     def gen_grid(self, input_limits=None, gridnum=4, store=True):
+        '''
+        Generate grid in equal distance.
+        Args:
+            input_limits: The list that contains the limits of inputs.
+            gridnum: the number of points for each dimensionality.
+            store: If the grid will be stored as pre-grid.
+        '''
         meshpoints = []
         if input_limits is not None:
             self.limits = input_limits
@@ -106,11 +126,13 @@ class Surrogate:
         return grid
 
     def surrogate_save(self):
+        # Automatically save the surrogate model with model name.
         torch.save(self.surrogate.state_dict(), self.model_name + '.sur')
         np.savez(self.model_name, limits=self.limits, pre_grid=self.pre_grid, pre_out=self.pre_out,
                  grid_record=self.grid_record)
 
     def surrogate_load(self):
+        # Automatically load the surrogate model with model name.
         self.surrogate.load_state_dict(torch.load(self.model_name + '.sur'))
         container = np.load(self.model_name + '.npz')
         for key in container:
@@ -121,6 +143,16 @@ class Surrogate:
                 print("Warning: [" + key + "] is not a surrogate variables.")
 
     def pre_train(self, max_iters, lr, lr_exp, record_interval, store=True, reg=False):
+        '''
+        Train the surrogate model on pre-grid.
+        Args:
+            max_iters: The number of iterations
+            lr: Learning rate
+            lr_exp: Decay factor for scheduler.
+            record_interval: The length of interval that record loss.
+            store: If the surrogate model will be saved after training.
+            reg: If False, no regularization will be applied; otherwise L2 regularization with 0.0001 will be applied.
+        '''
         grid = (self.pre_grid - self.m) / self.sd
         out = (self.pre_out - self.tm) / self.tsd
         optimizer = torch.optim.RMSprop(self.surrogate.parameters(), lr=lr)
@@ -147,6 +179,18 @@ class Surrogate:
         if store: self.surrogate_save()
 
     def update(self, x, max_iters=10000, lr=0.01, lr_exp=0.999, record_interval=500, store=False, tol=1e-5, reg=False):
+        '''
+        Update the surrogate model on new batch of x.
+        Args:
+            x: new batch.
+            max_iters: The number of iterations
+            lr: Learning rate
+            lr_exp: Decay factor for scheduler.
+            record_interval: The length of interval that record loss.
+            store: If the surrogate model will be saved after training.
+            tol: Tolerance to detect convergence.
+            reg: If False, no regularization will be applied; otherwise L2 regularization with 0.01 will be applied.
+        '''
         self.grid_record = torch.cat((self.grid_record, x), dim=0)
         s = torch.std(x, dim=0)
         thresh = 0.1
@@ -188,4 +232,9 @@ class Surrogate:
         if store: self.surrogate_save()
 
     def forward(self, x):
+        '''
+        Evaluate surrogate model with input x
+        Args:
+            x: input.
+        '''
         return self.surrogate((x - self.m) / self.sd) * self.tsd + self.tm
