@@ -1,6 +1,5 @@
 # DPNF
-This repository contains python implementations for paper *Differentially Private Normalizing Flows for Density Estimation, Data Synthesis, and Variational Inference with Application to Electronic Health Records*. 
-Density estimation, variational inference with differentially private normalizing flow are implemented for an analytical regression model and a circuit model for health data. 
+This repository contains python implementations for the experiments in paper *Differentially Private Normalizing Flows for Density Estimation, Data Synthesis, and Variational Inference with Application to Electronic Health Records* (Su, Wang, Liu, Schiavazzi, 2023). Density estimation, variational inference with differentially private normalizing flow are implemented in simulated data from a nonlinear regression model and  Electronic Health Records (EHR) data modeled by a circuit model.
 
 ## Citation
 Circuit model implementation is cited from [the Schiavazzi Lab at the University of Notre Dame](https://github.com/desResLab/supplMatHarrod20/tree/master/models)
@@ -13,7 +12,7 @@ and Normalizing Flow (MADE, MAF, RealNVP) implementation is cited from [Kamen Bl
 * Scipy 1.8.0
 * Cvsim6
 
-cvsim6 is limited for experiment with circuit model, which is contained in folder [supplMatHarrod20](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20). 
+cvsim6 is for the experiments based on the circuit model, which is contained in folder [supplMatHarrod20](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20). 
 To complile this package, please cd to the folder [models](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20/models) and execute the following in terminal
 ```
 python3 setup.py build_ext --inplace
@@ -21,38 +20,39 @@ python3 setup.py build_ext --inplace
 For additional information, please refer to the [README](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20/README.md) and the other [README](https://github.com/cedricwangyu/DPNF/tree/master/supplMatHarrod20/models/README.md).
 
 ## Density Estimation
-To run with EHR data without differential privacy, we recommend
+To run on EHR data without differential privacy, use
 ```
 python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --hidden_size 1 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy False
 ```
-To run with EHR data with differential privacy (sigma = 6.10 for example), we recommend
+To run on EHR data with differential privacy (sigma = 6.10 for example), use
 ```
 python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --hidden_size 1 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy True --poisson_ratio 0.5 --sigma 6.10 --C 10
 ```
 
-To run with regression model without differential privacy, we recommend
+To run on simulated data from the nonlinear regression model without differential privacy, use
 ```
 python run_experiment.py --task de --name REG_DE --job reg --data_dir source/data/Regression_private/eps_2.txt --output_dir results/REG_DE --flow_type maf --n_blocks 18 --hidden_size 100 --input_size 9 --n_iter 8000 --optimizer_type rmsprop --lr 0.002 --lr_decay 0.9995 --n_sample 5000 --noisy False
 ```
-To run with regression model with differential privacy (sigma = 6.68 for example), we recommend
+To run simulated data from the nonlinear regression model with differential privacy (sigma = 6.68 for example), use
 ```
 python run_experiment.py --task de --name REG_DE --job reg --data_dir source/data/Regression_private/eps_2.txt --output_dir results/REG_DE --flow_type maf --n_blocks 18 --hidden_size 100 --input_size 9 --n_iter 8000 --optimizer_type rmsprop --lr 0.002 --lr_decay 0.9995 --n_sample 5000 --noisy True --poisson_ratio 0.08333333333 --sigma 6.68 --C 10
 ```
 ## Variational Inference
-To run with regression model without differential privacy, we recommend
+To run on simulated data from the nonlinear regression model without differential privacy, use
 ```
 python run_experiment.py --task vi --job reg --data_dir source/data/data_reg.txt --n_blocks 1 --n_hidden 1 --hidden_size 10 --input_size 5 --n_iter 8000 --batch_size 1000 --lr 0.01
 ```
-To run with regression model with differential privacy (sigma = 6.68 for example), we recommend
+To run won simulated data from the nonlinear regression model with differential privacy (sigma = 6.68 for example), use
 ```
 python run_experiment.py --task vi --job reg --data_dir source/data/data_reg.txt --n_blocks 1 --n_hidden 1 --hidden_size 10 --input_size 5 --n_iter 8000 --batch_size 1000 --lr 0.01 --noisy True --sigma 6.68 --C 10 --poisson_ratio 0.083333333
 ```
 
-To run with EHR data, the surrogate model should be trained, therefore *circuit_model.npz* and *circuit_model.sur* needs to be presented in root directory. If not, please execute
+To run on EHR data with the cvsim6 model, a surrogate model to the true model is trained first, therefore *circuit_model.npz* and *circuit_model.sur* should to be placed in root directory. If not,  execute
 ```
 python EHR.py --data_dir source/data/EHR_private/EHR.txt
 ```
-These two files are also contained in folder [trained_circuit_surrogate](https://github.com/cedricwangyu/DPNF/tree/master/source/trained_circuit_surrogate). Then we recommend
+These two files are also contained in folder [trained_circuit_surrogate](https://github.com/cedricwangyu/DPNF/tree/master/source/trained_circuit_surrogate). Then run
+
 ```
 python run_experiment.py --task vi --job ehr --data_dir source/data/EHR_private/EHR_cvsim6.txt --n_blocks 5 --n_hidden 1 --hidden_size 100 --input_size 2 --n_iter 15000 --batch_size 500 --optimizer_type rmsprop --lr 0.01 --scheduler_order True --lr_decay 0.9999 
 ```
@@ -82,11 +82,11 @@ We summarize all hyper parameters used in these experiments.
 | Poisson sampling rate     | --poisson_ratio    | 0.5        |            | 0.08333333 | 0.08333333 |            |
 
 Note that
-* **EHR DP-DE**: Differentially private density estimation on EHR data (Section 3.2).
-* **EHR VI**: Variational inference with normalizing flow with circuit model on EHR data (Section 3.4.2).
-* **Reg DP-VI**: Differentially private variational inference with normalizing flow on regression model (Section 4.2).
-* **Reg DP-DE**: Differentially private density estimation on regression model (Section 4.2).
-* **Reg VI**: Variational inference with normalizing on regression model (Section 4.2).
+* **EHR DP-DE**: Differentially private density estimation for the EHR data (Section 3.2).
+* **EHR VI**: Variational inference with normalizing flow on EHR data  with the circuit model (Section 3.4.2).
+* **Reg DP-VI**: Differentially private variational inference with normalizing flow on simulated data from the nonlinear regression model (Section 4.2).
+* **Reg DP-DE**: Differentially private density estimation for simulatee data from the nonlinear regression model (Section 4.2).
+* **Reg VI**: Variational inference with normalizing flow on simulatee data from the nonlinear regression model  (Section 4.2).
 
 
 
