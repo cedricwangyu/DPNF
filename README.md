@@ -1,5 +1,7 @@
 # DPNF
-This repository contains python implementations for the experiments in paper *Differentially Private Normalizing Flows for Density Estimation, Data Synthesis, and Variational Inference with Application to Electronic Health Records* (Su, Wang, Liu, Schiavazzi, 2023). Density estimation, variational inference with differentially private normalizing flow are implemented in simulated data from a nonlinear regression model and  Electronic Health Records (EHR) data modeled by a circuit model.
+This repository contains python implementations for the experiments in paper *Differentially Private Normalizing Flows for Density Estimation, Data Synthesis, and Variational Inference with Application to Electronic Health Records* (Su, Wang, Schiavazzi, Liu, 2023). Density estimation, variational inference with differentially private normalizing flow are implemented in simulated data from a nonlinear regression model and  Electronic Health Records (EHR) data modeled by a circuit model.
+
+The EHR dataset cannot be shared publicly due to the privacy of individuals that participated in the study. The data will be shared on reasonable request to the authors.
 
 ## Citation
 Circuit model implementation is cited from [the Schiavazzi Lab at the University of Notre Dame](https://github.com/desResLab/supplMatHarrod20/tree/master/models)
