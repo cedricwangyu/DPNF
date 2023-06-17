@@ -22,11 +22,11 @@ For additional information, please refer to the [README](https://github.com/cedr
 ## Density Estimation
 To run on EHR data without differential privacy, use
 ```
-python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --hidden_size 1 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy False
+python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --n_hidden 1 --hidden_size 200 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy False
 ```
 To run on EHR data with differential privacy (sigma = 6.10 for example), use
 ```
-python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --hidden_size 1 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy True --poisson_ratio 0.5 --sigma 6.10 --C 10
+python run_experiment.py --task de --name EHR_DE --job ehr --data_dir source/data/EHR_private/EHR.txt --output_dir results/EHR_DE --flow_type maf --n_blocks 15 --n_hidden 1 --hidden_size 200 --input_size 19 --n_iter 8000 --optimizer_type sgd --lr 0.00002 --lr_decay 0.9999 --n_sample 5000 --noisy True --poisson_ratio 0.5 --sigma 6.10 --C 10
 ```
 
 To run on simulated data from the nonlinear regression model without differential privacy, use

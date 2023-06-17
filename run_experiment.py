@@ -127,6 +127,9 @@ if __name__ == "__main__":
     else:
         raise ValueError('Unrecognized model.')
 
+    # print(sum(param.numel() for param in model.parameters()))
+    # exit(0)
+
     model = model.to(device)
     if args.optimizer_type == 'rmsprop':
         optimizer = torch.optim.RMSprop(model.parameters(), lr=args.lr)
